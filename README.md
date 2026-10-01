@@ -16,7 +16,7 @@ pi install git:github.com/egornomic/pi-branch-ask
 
 ## Usage
 
-Once installed, the extension registers a `branch-ask` tool for interactive questionnaires with branching logic.
+Once installed, the extension registers a `branch-ask` tool for interactive questionnaires with branching logic. The tool is model-only: the model asks questions directly rather than through codemode scripts.
 
 ## How it works
 

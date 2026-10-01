@@ -1,6 +1,6 @@
 {
   "name": "pi-branch-ask",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Interactive ask tool for pi with branching questionnaire support",
   "type": "module",
   "keywords": ["pi-package", "pi", "pi-coding-agent", "extension"],
@@ -10,9 +10,8 @@
     "extensions": ["./index.ts"]
   },
   "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*",
-    "@mariozechner/pi-ai": "*",
-    "@mariozechner/pi-tui": "*",
-    "@sinclair/typebox": "*"
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-tui": "*"
   }
 }

@@ -5,29 +5,9 @@
  * If no branching metadata is provided, questions are asked in order.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { createRequire } from "node:module";
-import path from "node:path";
-
-const runtimeRequire = typeof require === "function" ? require : createRequire(import.meta.url);
-const globalNodeModulesPath = path.join(
-	path.dirname(path.dirname(process.execPath)),
-	"lib",
-	"node_modules",
-);
-const fallbackRequire = createRequire(path.join(globalNodeModulesPath, "pi-extension.js"));
-
-function loadRuntimeModule<T>(name: string): T {
-	try {
-		return runtimeRequire(name) as T;
-	} catch (error) {
-		try {
-			return fallbackRequire(name) as T;
-		} catch {
-			throw error;
-		}
-	}
-}
+import { StringEnum, Type } from "@earendil-works/pi-ai";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Editor, Key, matchesKey, Text, truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
 
 export type QuestionType = "single" | "multi";
 export type BranchMatch = "any" | "all";
@@ -366,20 +346,6 @@ function errorResult(message: string, questions: BranchQuestion[] = []) {
 }
 
 export default function askBranchedQuestions(pi: ExtensionAPI) {
-	const { StringEnum } = loadRuntimeModule<typeof import("@mariozechner/pi-ai")>(
-		"@mariozechner/pi-ai",
-	);
-	const {
-		Editor,
-		Key,
-		matchesKey,
-		Text,
-		truncateToWidth,
-		visibleWidth,
-		wrapTextWithAnsi,
-	} = loadRuntimeModule<typeof import("@mariozechner/pi-tui")>("@mariozechner/pi-tui");
-	const { Type } = loadRuntimeModule<typeof import("@sinclair/typebox")>("@sinclair/typebox");
-
 	const OptionSchema = Type.Object({
 		value: Type.String({ description: "The value returned when selected" }),
 		label: Type.String({ description: "Display label for the option" }),
@@ -448,6 +414,7 @@ export default function askBranchedQuestions(pi: ExtensionAPI) {
 
 	pi.registerTool({
 		name: "branch-ask",
+		exposure: "model-only",
 		label: "Branch Ask",
 		description:
 			"Ask the user single - or multi-select questions with branching. Use branches when your next question depends on user's previous question answer. Without branch metadata, it behaves like a normal sequential questionnaire.",
